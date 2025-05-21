@@ -26,11 +26,21 @@ from torch.distributed import ProcessGroup
 from torch.distributed.distributed_c10d import PrefixStore
 from vllm.logger import logger
 from vllm.platforms import Platform, PlatformEnum
-from vllm_ascend.utils import is_310p, communication_adaptation_310p
 
 from vllm_ascend.ascend_config import check_ascend_config, init_ascend_config
-from vllm_ascend.utils import (ASCEND_QUATIZATION_METHOD, is_310p,
+from vllm_ascend.utils import (ASCEND_QUATIZATION_METHOD,
+                               communication_adaptation_310p, is_310p,
                                update_aclgraph_sizes)
+
+CUSTOM_OP_ENABLED = False
+try:
+    # register custom ops into torch_library here
+    import vllm_ascend.vllm_ascend_C  # type: ignore  # noqa: F401
+    CUSTOM_OP_ENABLED = True
+except ImportError as e:
+    logging.warning(
+        "Failed to import 'vllm_ascend.vllm_ascend_C': %s. All custom ops will be disabled. ",
+        e)
 
 if TYPE_CHECKING:
     from vllm.config import ModelConfig, VllmConfig
