@@ -23,8 +23,6 @@ import vllm.distributed
 import vllm.envs as envs
 from torch.distributed import ProcessGroup
 from vllm.config import ParallelConfig
-from vllm.distributed.utils import \
-    stateless_init_torch_distributed_process_group
 from vllm.logger import logger
 
 from vllm_ascend.utils import NullHandle, is_310p
@@ -84,7 +82,7 @@ def stateless_init_dp_group(self) -> "ProcessGroup":
 
 vllm.distributed.parallel_state.destroy_model_parallel = ascend_destroy_model_parallel
 ParallelConfig.get_next_dp_init_port = parallel_config_get_dp_port
-ParallelConfig.stateless_init_dp_group = stateless_init_dp_group
+ParallelConfig.stateless_init_dp_group = ascend_stateless_init_dp_group
 
 
 def communication_adaptation_310p():
