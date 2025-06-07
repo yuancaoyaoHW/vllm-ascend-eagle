@@ -28,7 +28,8 @@ from vllm.logger import logger
 from vllm.platforms import Platform, PlatformEnum
 
 from vllm_ascend.ascend_config import check_ascend_config, init_ascend_config
-from vllm_ascend.utils import ASCEND_QUATIZATION_METHOD, update_aclgraph_sizes
+from vllm_ascend.utils import (ASCEND_QUATIZATION_METHOD, is_310p,
+                               update_aclgraph_sizes)
 
 CUSTOM_OP_ENABLED = False
 try:
