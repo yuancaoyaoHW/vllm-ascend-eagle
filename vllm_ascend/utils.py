@@ -66,9 +66,15 @@ ACL_FORMAT_FRACTAL_NZ = 29
 
 
 def is_310p():
+    if not torch.npu.is_available():
+        return False
+    device_count = torch.npu.device_count()
+    if device_count <= 0:
+        return False
+    current_device = torch.npu.current_device()
     global SOC_VERSION
     if SOC_VERSION is None:
-        SOC_VERSION = torch.npu.get_device_name(0)
+        SOC_VERSION = torch.npu.get_device_name(current_device)
     return SOC_VERSION in SOC_VERSION_INFERENCE_SERIES
 
 
